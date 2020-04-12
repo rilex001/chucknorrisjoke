@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import './App.css'
+class App extends Component {
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  constructor(props){
+    super(props)
+    this.state = {
+      joke: ''
+    }
+  }
+
+  componentDidMount(){
+    this.handleClick()
+  }
+    
+  handleClick = () => {
+      fetch("https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/random", {
+	"method": "GET",
+	"headers": {
+		"x-rapidapi-host": "matchilling-chuck-norris-jokes-v1.p.rapidapi.com",
+		"x-rapidapi-key": "5f52f5f4e2msh63751c7be2936f2p16247djsnd8f63484945f",
+		"accept": "application/json"
+	}
+  })
+  .then(response =>  response.json() )
+  .then(result => {
+    console.log(result.value)
+    this.setState({
+      joke: result.value
+    })
+  })
+  .catch(err => {
+	  console.log(err);
+  });
+}
+    
+  
+  render(){
+    return (
+      <div className="App">
+        <div className='card'>
+        <p>{this.state.joke}</p>
+        
+        <button className='button' onClick={this.handleClick}>NEW JOKE</button>
+        </div>
+      </div>
+    );
+  }
+  
 }
 
 export default App;
